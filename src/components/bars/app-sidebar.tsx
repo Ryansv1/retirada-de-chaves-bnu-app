@@ -7,23 +7,14 @@ import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
-	SidebarMenuSub,
-	SidebarMenuSubButton,
-	SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import {
-	Collapsible,
-	CollapsibleContent,
-	CollapsibleTrigger,
-} from "../ui/collapsible";
+
 import { Link } from "@tanstack/react-router";
 import {
 	ArrowRightLeft,
-	ChevronUp,
 	LayoutDashboardIcon,
 	ListIcon,
 	ShieldUser,
-	UserRound,
 } from "lucide-react";
 import { useTheme } from "@/context/theme.context";
 import { Separator } from "../ui/separator";

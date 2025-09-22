@@ -14,14 +14,14 @@ import {
 	FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { signIn, getSession, signUp } from "@/lib/auth";
+import { signIn, getSession } from "@/lib/auth";
 import { SignInSchema, type ISignInData } from "@/schema/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import bgUrl from "@/assets/images/login-page.jpg";
 import logoUrl from "@/assets/images/logo_horizontal.png";
-import { LoaderIcon, LogIn, Trash2Icon, UserPlusIcon } from "lucide-react";
+import { LoaderIcon, LogIn, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";

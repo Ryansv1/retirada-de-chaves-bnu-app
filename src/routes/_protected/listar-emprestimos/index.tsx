@@ -97,9 +97,9 @@ const columns: ColumnDef<Emprestimo>[] = [
 	},
 	{
 		id: "actions",
-		cell: ({ row }) => {
-			const emprestimo = row.original;
-		},
+		// cell: ({ row }) => {
+		// 	const emprestimo = row.original;
+		// },
 	},
 ];
 
