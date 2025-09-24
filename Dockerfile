@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Instala todas as dependências (inclui devDependencies, como typescript)
-RUN npm ci
+RUN npm install
 
 # Copia o restante do projeto
 COPY . .

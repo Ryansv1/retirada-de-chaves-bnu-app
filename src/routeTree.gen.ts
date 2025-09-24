@@ -13,6 +13,7 @@ import { Route as SignInRouteImport } from './routes/signIn'
 import { Route as ProtectedRouteRouteImport } from './routes/_protected/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as ProtectedOperadoresRouteRouteImport } from './routes/_protected/operadores/route'
 import { Route as ProtectedOperadoresIndexRouteImport } from './routes/_protected/operadores/index'
 import { Route as ProtectedListarEmprestimosIndexRouteImport } from './routes/_protected/listar-emprestimos/index'
 import { Route as ProtectedEmprestimosIndexRouteImport } from './routes/_protected/emprestimos/index'
@@ -37,11 +38,17 @@ const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => ProtectedRouteRoute,
 } as any)
+const ProtectedOperadoresRouteRoute =
+  ProtectedOperadoresRouteRouteImport.update({
+    id: '/operadores',
+    path: '/operadores',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 const ProtectedOperadoresIndexRoute =
   ProtectedOperadoresIndexRouteImport.update({
-    id: '/operadores/',
-    path: '/operadores/',
-    getParentRoute: () => ProtectedRouteRoute,
+    id: '/',
+    path: '/',
+    getParentRoute: () => ProtectedOperadoresRouteRoute,
   } as any)
 const ProtectedListarEmprestimosIndexRoute =
   ProtectedListarEmprestimosIndexRouteImport.update({
@@ -57,19 +64,20 @@ const ProtectedEmprestimosIndexRoute =
   } as any)
 const ProtectedOperadoresCadastroRoute =
   ProtectedOperadoresCadastroRouteImport.update({
-    id: '/operadores/cadastro',
-    path: '/operadores/cadastro',
-    getParentRoute: () => ProtectedRouteRoute,
+    id: '/cadastro',
+    path: '/cadastro',
+    getParentRoute: () => ProtectedOperadoresRouteRoute,
   } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/signIn': typeof SignInRoute
+  '/operadores': typeof ProtectedOperadoresRouteRouteWithChildren
   '/dashboard': typeof ProtectedDashboardRoute
   '/operadores/cadastro': typeof ProtectedOperadoresCadastroRoute
   '/emprestimos': typeof ProtectedEmprestimosIndexRoute
   '/listar-emprestimos': typeof ProtectedListarEmprestimosIndexRoute
-  '/operadores': typeof ProtectedOperadoresIndexRoute
+  '/operadores/': typeof ProtectedOperadoresIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,6 +93,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_protected': typeof ProtectedRouteRouteWithChildren
   '/signIn': typeof SignInRoute
+  '/_protected/operadores': typeof ProtectedOperadoresRouteRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/operadores/cadastro': typeof ProtectedOperadoresCadastroRoute
   '/_protected/emprestimos/': typeof ProtectedEmprestimosIndexRoute
@@ -96,11 +105,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/signIn'
+    | '/operadores'
     | '/dashboard'
     | '/operadores/cadastro'
     | '/emprestimos'
     | '/listar-emprestimos'
-    | '/operadores'
+    | '/operadores/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -115,6 +125,7 @@ export interface FileRouteTypes {
     | '/'
     | '/_protected'
     | '/signIn'
+    | '/_protected/operadores'
     | '/_protected/dashboard'
     | '/_protected/operadores/cadastro'
     | '/_protected/emprestimos/'
@@ -158,12 +169,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedDashboardRouteImport
       parentRoute: typeof ProtectedRouteRoute
     }
-    '/_protected/operadores/': {
-      id: '/_protected/operadores/'
+    '/_protected/operadores': {
+      id: '/_protected/operadores'
       path: '/operadores'
       fullPath: '/operadores'
-      preLoaderRoute: typeof ProtectedOperadoresIndexRouteImport
+      preLoaderRoute: typeof ProtectedOperadoresRouteRouteImport
       parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/operadores/': {
+      id: '/_protected/operadores/'
+      path: '/'
+      fullPath: '/operadores/'
+      preLoaderRoute: typeof ProtectedOperadoresIndexRouteImport
+      parentRoute: typeof ProtectedOperadoresRouteRoute
     }
     '/_protected/listar-emprestimos/': {
       id: '/_protected/listar-emprestimos/'
@@ -181,28 +199,42 @@ declare module '@tanstack/react-router' {
     }
     '/_protected/operadores/cadastro': {
       id: '/_protected/operadores/cadastro'
-      path: '/operadores/cadastro'
+      path: '/cadastro'
       fullPath: '/operadores/cadastro'
       preLoaderRoute: typeof ProtectedOperadoresCadastroRouteImport
-      parentRoute: typeof ProtectedRouteRoute
+      parentRoute: typeof ProtectedOperadoresRouteRoute
     }
   }
 }
 
-interface ProtectedRouteRouteChildren {
-  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+interface ProtectedOperadoresRouteRouteChildren {
   ProtectedOperadoresCadastroRoute: typeof ProtectedOperadoresCadastroRoute
-  ProtectedEmprestimosIndexRoute: typeof ProtectedEmprestimosIndexRoute
-  ProtectedListarEmprestimosIndexRoute: typeof ProtectedListarEmprestimosIndexRoute
   ProtectedOperadoresIndexRoute: typeof ProtectedOperadoresIndexRoute
 }
 
+const ProtectedOperadoresRouteRouteChildren: ProtectedOperadoresRouteRouteChildren =
+  {
+    ProtectedOperadoresCadastroRoute: ProtectedOperadoresCadastroRoute,
+    ProtectedOperadoresIndexRoute: ProtectedOperadoresIndexRoute,
+  }
+
+const ProtectedOperadoresRouteRouteWithChildren =
+  ProtectedOperadoresRouteRoute._addFileChildren(
+    ProtectedOperadoresRouteRouteChildren,
+  )
+
+interface ProtectedRouteRouteChildren {
+  ProtectedOperadoresRouteRoute: typeof ProtectedOperadoresRouteRouteWithChildren
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedEmprestimosIndexRoute: typeof ProtectedEmprestimosIndexRoute
+  ProtectedListarEmprestimosIndexRoute: typeof ProtectedListarEmprestimosIndexRoute
+}
+
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
+  ProtectedOperadoresRouteRoute: ProtectedOperadoresRouteRouteWithChildren,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
-  ProtectedOperadoresCadastroRoute: ProtectedOperadoresCadastroRoute,
   ProtectedEmprestimosIndexRoute: ProtectedEmprestimosIndexRoute,
   ProtectedListarEmprestimosIndexRoute: ProtectedListarEmprestimosIndexRoute,
-  ProtectedOperadoresIndexRoute: ProtectedOperadoresIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(
