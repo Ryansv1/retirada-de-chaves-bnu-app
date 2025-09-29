@@ -3,7 +3,7 @@ import z from "zod";
 export const RetiradaChaveSchema = z.object({
 	matricula: z
 		.string()
-		.min(8, "Digite uma matricula de 8 digitos no mínimo")
+		.min(7, "Digite uma matricula de 7 digitos no mínimo")
 		.max(11, "Matrícula não pode ser maior que 11 dígitos"),
 });
 
