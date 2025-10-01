@@ -18,6 +18,8 @@ import { Route as ProtectedOperadoresIndexRouteImport } from './routes/_protecte
 import { Route as ProtectedListarEmprestimosIndexRouteImport } from './routes/_protected/listar-emprestimos/index'
 import { Route as ProtectedEmprestimosIndexRouteImport } from './routes/_protected/emprestimos/index'
 import { Route as ProtectedOperadoresCadastroRouteImport } from './routes/_protected/operadores/cadastro'
+import { Route as ProtectedListarEmprestimosIdRouteImport } from './routes/_protected/listar-emprestimos/$id'
+import { Route as ProtectedEmprestimosEmprestimoAdministrativoIndexRouteImport } from './routes/_protected/emprestimos/emprestimo-administrativo/index'
 
 const SignInRoute = SignInRouteImport.update({
   id: '/signIn',
@@ -68,25 +70,41 @@ const ProtectedOperadoresCadastroRoute =
     path: '/cadastro',
     getParentRoute: () => ProtectedOperadoresRouteRoute,
   } as any)
+const ProtectedListarEmprestimosIdRoute =
+  ProtectedListarEmprestimosIdRouteImport.update({
+    id: '/listar-emprestimos/$id',
+    path: '/listar-emprestimos/$id',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
+const ProtectedEmprestimosEmprestimoAdministrativoIndexRoute =
+  ProtectedEmprestimosEmprestimoAdministrativoIndexRouteImport.update({
+    id: '/emprestimos/emprestimo-administrativo/',
+    path: '/emprestimos/emprestimo-administrativo/',
+    getParentRoute: () => ProtectedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/signIn': typeof SignInRoute
   '/operadores': typeof ProtectedOperadoresRouteRouteWithChildren
   '/dashboard': typeof ProtectedDashboardRoute
+  '/listar-emprestimos/$id': typeof ProtectedListarEmprestimosIdRoute
   '/operadores/cadastro': typeof ProtectedOperadoresCadastroRoute
   '/emprestimos': typeof ProtectedEmprestimosIndexRoute
   '/listar-emprestimos': typeof ProtectedListarEmprestimosIndexRoute
   '/operadores/': typeof ProtectedOperadoresIndexRoute
+  '/emprestimos/emprestimo-administrativo': typeof ProtectedEmprestimosEmprestimoAdministrativoIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/signIn': typeof SignInRoute
   '/dashboard': typeof ProtectedDashboardRoute
+  '/listar-emprestimos/$id': typeof ProtectedListarEmprestimosIdRoute
   '/operadores/cadastro': typeof ProtectedOperadoresCadastroRoute
   '/emprestimos': typeof ProtectedEmprestimosIndexRoute
   '/listar-emprestimos': typeof ProtectedListarEmprestimosIndexRoute
   '/operadores': typeof ProtectedOperadoresIndexRoute
+  '/emprestimos/emprestimo-administrativo': typeof ProtectedEmprestimosEmprestimoAdministrativoIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,10 +113,12 @@ export interface FileRoutesById {
   '/signIn': typeof SignInRoute
   '/_protected/operadores': typeof ProtectedOperadoresRouteRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
+  '/_protected/listar-emprestimos/$id': typeof ProtectedListarEmprestimosIdRoute
   '/_protected/operadores/cadastro': typeof ProtectedOperadoresCadastroRoute
   '/_protected/emprestimos/': typeof ProtectedEmprestimosIndexRoute
   '/_protected/listar-emprestimos/': typeof ProtectedListarEmprestimosIndexRoute
   '/_protected/operadores/': typeof ProtectedOperadoresIndexRoute
+  '/_protected/emprestimos/emprestimo-administrativo/': typeof ProtectedEmprestimosEmprestimoAdministrativoIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -107,19 +127,23 @@ export interface FileRouteTypes {
     | '/signIn'
     | '/operadores'
     | '/dashboard'
+    | '/listar-emprestimos/$id'
     | '/operadores/cadastro'
     | '/emprestimos'
     | '/listar-emprestimos'
     | '/operadores/'
+    | '/emprestimos/emprestimo-administrativo'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/signIn'
     | '/dashboard'
+    | '/listar-emprestimos/$id'
     | '/operadores/cadastro'
     | '/emprestimos'
     | '/listar-emprestimos'
     | '/operadores'
+    | '/emprestimos/emprestimo-administrativo'
   id:
     | '__root__'
     | '/'
@@ -127,10 +151,12 @@ export interface FileRouteTypes {
     | '/signIn'
     | '/_protected/operadores'
     | '/_protected/dashboard'
+    | '/_protected/listar-emprestimos/$id'
     | '/_protected/operadores/cadastro'
     | '/_protected/emprestimos/'
     | '/_protected/listar-emprestimos/'
     | '/_protected/operadores/'
+    | '/_protected/emprestimos/emprestimo-administrativo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -204,6 +230,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedOperadoresCadastroRouteImport
       parentRoute: typeof ProtectedOperadoresRouteRoute
     }
+    '/_protected/listar-emprestimos/$id': {
+      id: '/_protected/listar-emprestimos/$id'
+      path: '/listar-emprestimos/$id'
+      fullPath: '/listar-emprestimos/$id'
+      preLoaderRoute: typeof ProtectedListarEmprestimosIdRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
+    '/_protected/emprestimos/emprestimo-administrativo/': {
+      id: '/_protected/emprestimos/emprestimo-administrativo/'
+      path: '/emprestimos/emprestimo-administrativo'
+      fullPath: '/emprestimos/emprestimo-administrativo'
+      preLoaderRoute: typeof ProtectedEmprestimosEmprestimoAdministrativoIndexRouteImport
+      parentRoute: typeof ProtectedRouteRoute
+    }
   }
 }
 
@@ -226,15 +266,20 @@ const ProtectedOperadoresRouteRouteWithChildren =
 interface ProtectedRouteRouteChildren {
   ProtectedOperadoresRouteRoute: typeof ProtectedOperadoresRouteRouteWithChildren
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+  ProtectedListarEmprestimosIdRoute: typeof ProtectedListarEmprestimosIdRoute
   ProtectedEmprestimosIndexRoute: typeof ProtectedEmprestimosIndexRoute
   ProtectedListarEmprestimosIndexRoute: typeof ProtectedListarEmprestimosIndexRoute
+  ProtectedEmprestimosEmprestimoAdministrativoIndexRoute: typeof ProtectedEmprestimosEmprestimoAdministrativoIndexRoute
 }
 
 const ProtectedRouteRouteChildren: ProtectedRouteRouteChildren = {
   ProtectedOperadoresRouteRoute: ProtectedOperadoresRouteRouteWithChildren,
   ProtectedDashboardRoute: ProtectedDashboardRoute,
+  ProtectedListarEmprestimosIdRoute: ProtectedListarEmprestimosIdRoute,
   ProtectedEmprestimosIndexRoute: ProtectedEmprestimosIndexRoute,
   ProtectedListarEmprestimosIndexRoute: ProtectedListarEmprestimosIndexRoute,
+  ProtectedEmprestimosEmprestimoAdministrativoIndexRoute:
+    ProtectedEmprestimosEmprestimoAdministrativoIndexRoute,
 }
 
 const ProtectedRouteRouteWithChildren = ProtectedRouteRoute._addFileChildren(

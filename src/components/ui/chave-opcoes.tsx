@@ -14,6 +14,19 @@ import { Separator } from "./separator";
 import { RetornarEmprestimo } from "./retornar-emprestimo";
 import { Alert, AlertDescription, AlertTitle } from "./alert";
 import { GerarEmprestimo } from "./gerar-emprestimos";
+import { useQuery } from "@tanstack/react-query";
+import { getChaveById } from "@/services/chaves";
+import { DateTime } from "luxon";
+import { Skeleton } from "./skeleton";
+const EMPRESTIMO_BY_CHAVE_ID_QUERY_KEY = "emprestimo-by-chave";
+
+function useChaveById(chaveId: string, isDisponivel: boolean) {
+	return useQuery({
+		queryKey: [EMPRESTIMO_BY_CHAVE_ID_QUERY_KEY, chaveId],
+		queryFn: () => getChaveById(chaveId),
+		enabled: !!chaveId && isDisponivel === false,
+	});
+}
 
 export function Opcoes({
 	chave,
@@ -22,9 +35,11 @@ export function Opcoes({
 	chave: IAllChaves;
 	isDisponivel: boolean;
 }) {
+	const { data, isLoading, isError } = useChaveById(chave.id, isDisponivel);
+
 	if (chave?.tipo === TipoChave["ARMARIO"]) {
 		return (
-			<Dialog>
+			<Dialog key={chave.id}>
 				<DialogTrigger asChild>
 					<Button variant={"outline"}>
 						<CogIcon />
@@ -51,6 +66,38 @@ export function Opcoes({
 									<h1>Localização: {chave.Armario?.localizacao}</h1>
 								</div>
 							</div>
+							<Separator />
+							{!isDisponivel ? (
+								<div className="flex flex-col gap-4 mt-4 border-1  rounded-lg p-4">
+									<h1>Quem retirou:</h1>
+									{isLoading ? (
+										<Skeleton className="w-full h-10" />
+									) : isError ? (
+										<span className="flex-1 bg-destructive/10 font-bold h-84 flex items-center justify-center border-destructive border-2 rounded-lg text-destructive">
+											Ocorreu um erro ao listar o empréstimos relacionado à
+											chave. Contate o Administrador.
+										</span>
+									) : (
+										<div className="grid grid-cols-1 gap-2 mt-2 text-sm">
+											<h1>
+												Usuário:{" "}
+												{data?.Emprestimo.map(
+													(emprestimo) => emprestimo.UsuarioSolicitante.nome
+												)}
+											</h1>
+											<h2>
+												Data da retirada:{" "}
+												{data?.Emprestimo.map((emprestimo) =>
+													DateTime.fromISO(emprestimo.dataRetirada).toFormat(
+														"DD, HH:mm",
+														{ locale: "pt-BR" }
+													)
+												)}
+											</h2>
+										</div>
+									)}
+								</div>
+							) : null}
 						</div>
 					</div>
 					<DialogFooter>
@@ -67,7 +114,7 @@ export function Opcoes({
 
 	if (chave?.tipo === TipoChave["AMBIENTE"]) {
 		return (
-			<Dialog>
+			<Dialog key={chave.id}>
 				<DialogTrigger asChild>
 					<Button variant={"outline"}>
 						<CogIcon />
@@ -96,6 +143,39 @@ export function Opcoes({
 									<h1>Capacidade do ambiente: {chave.Ambiente?.capacidade}</h1>
 								</div>
 							</div>
+							<Separator />
+
+							{!isDisponivel ? (
+								<div className="flex flex-col gap-4 mt-4 border-1  rounded-lg p-4">
+									<h1>Quem retirou:</h1>
+									{isLoading ? (
+										<Skeleton className="w-full h-10" />
+									) : isError ? (
+										<span className="flex-1 bg-destructive/10 font-bold h-84 flex items-center justify-center border-destructive border-2 rounded-lg text-destructive">
+											Ocorreu um erro ao listar o empréstimos relacionado à
+											chave. Contate o Administrador.
+										</span>
+									) : (
+										<div className="grid grid-cols-1 gap-2 mt-2 text-sm">
+											<h1>
+												Usuário:{" "}
+												{data?.Emprestimo.map(
+													(emprestimo) => emprestimo.UsuarioSolicitante.nome
+												)}
+											</h1>
+											<h2>
+												Data da retirada:{" "}
+												{data?.Emprestimo.map((emprestimo) =>
+													DateTime.fromISO(emprestimo.dataRetirada).toFormat(
+														"DD, HH:mm",
+														{ locale: "pt-BR" }
+													)
+												)}
+											</h2>
+										</div>
+									)}
+								</div>
+							) : null}
 							{chave.Ambiente?.precisaReserva ? (
 								<Alert variant={"destructive"}>
 									<AlertCircleIcon />

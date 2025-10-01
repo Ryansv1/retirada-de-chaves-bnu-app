@@ -1,6 +1,11 @@
 import { api } from "@/lib/axios";
 import type { TListarEmprestimos } from "@/routes/_protected/listar-emprestimos";
-import type { IDevolucaoData, IRetiradaData } from "@/schema/chave";
+import type {
+	IDevolucaoData,
+	IEmprestimoAdministrativo,
+	IRetiradaData,
+} from "@/schema/chave";
+import type { IEmprestimoByID } from "@/types";
 
 export async function getEmprestimos(filters: TListarEmprestimos) {
 	try {
@@ -9,6 +14,15 @@ export async function getEmprestimos(filters: TListarEmprestimos) {
 				...filters,
 			},
 		});
+		return response.data;
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export async function getEmprestimoById(id: string) {
+	try {
+		const response = await api.get<IEmprestimoByID>(`/emprestimos/${id}`);
 		return response.data;
 	} catch (error) {
 		console.error(error);
@@ -43,11 +57,19 @@ export async function retornarEmprestimo(
 				},
 			}
 		);
+		return response.data;
+	} catch (error) {
+		throw error;
+	}
+}
 
-		if (response.status < 200 || response.status >= 300) {
-			throw new Error(response.data);
-		}
-
+export async function gerarEmprestimoAdministrativo(
+	data: IEmprestimoAdministrativo
+) {
+	try {
+		const response = await api.post("/emprestimos/emprestimo-administrativo", {
+			...data,
+		});
 		return response.data;
 	} catch (error) {
 		throw error;

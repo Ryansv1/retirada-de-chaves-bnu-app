@@ -5,7 +5,7 @@ export const SignUpSchema = z.object({
 	email: z.email(),
 	password: z
 		.string()
-		.min(8, "Mínimo de 8 caracteres")
+		.min(6, "Mínimo de 6 caracteres")
 		.nonempty("Não deve estar vazia.")
 		.trim(),
 });

@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import z from "zod";
 import { getChaves } from "@/services/chaves";
 
@@ -28,16 +28,21 @@ import {
 	Home,
 	KeyRound,
 	MapPinIcon,
+	PlusCircleIcon,
 } from "lucide-react";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { TipoChave } from "@/types";
 import { Opcoes } from "@/components/ui/chave-opcoes";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 export const ChavesSearchFilterSchema = z.object({
 	codigo: z.string().optional(),
-	status: z.enum(["disponivel", "indisponivel"]).catch("disponivel"),
+	status: z
+		.enum(["disponivel", "indisponivel"])
+		.default("disponivel")
+		.optional(),
 	tipo: z.enum(["ARMARIO", "AMBIENTE"]).optional(),
 	localizacao: z.enum(["SNO", "VELHA"]).optional(),
 });
@@ -88,9 +93,14 @@ function RouteComponent() {
 	return (
 		<div className="container mx-auto">
 			{/** Header */}
-			<div className="flex flex-row gap-2 items-center">
+			<div className="flex flex-row gap-2 items-center relative">
 				<h1 className="text-2xl font-bold">Empréstimos de chave</h1>
 				<ArrowLeftRightIcon />
+				<Button asChild className="absolute right-0">
+					<Link to={"/emprestimos/emprestimo-administrativo"}>
+						<PlusCircleIcon /> Empréstimo Administrativo{" "}
+					</Link>
+				</Button>
 			</div>
 			<h2 className="text-md text-muted-foreground">
 				Selecione os filtros de acordo com suas necessidades

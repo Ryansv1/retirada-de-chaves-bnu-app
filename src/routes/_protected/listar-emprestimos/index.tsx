@@ -23,10 +23,10 @@ import { cn } from "@/lib/utils";
 import { getEmprestimos } from "@/services/emprestimos";
 import { Status, type Emprestimo } from "@/types";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import type { ColumnDef } from "@tanstack/react-table";
 import { useDebounce } from "@uidotdev/usehooks";
-import { CalendarIcon, FilterIcon, InfoIcon } from "lucide-react";
+import { ArrowRight, CalendarIcon, FilterIcon, InfoIcon } from "lucide-react";
 import { DateTime } from "luxon";
 import React from "react";
 import z from "zod";
@@ -77,7 +77,7 @@ const columns: ColumnDef<Emprestimo>[] = [
 		cell: ({ row }) => {
 			const dataRetirada = row.original.dataRetirada;
 
-			return DateTime.fromISO(dataRetirada).toFormat("DD", {
+			return DateTime.fromISO(dataRetirada).toFormat("DD, HH:mm", {
 				locale: "pt-BR",
 			});
 		},
@@ -89,7 +89,9 @@ const columns: ColumnDef<Emprestimo>[] = [
 			const dataRetirada = row.original.dataRetorno;
 
 			return dataRetirada ? (
-				DateTime.fromISO(dataRetirada).toFormat("DD", { locale: "pt-BR" })
+				DateTime.fromISO(dataRetirada).toFormat("DD, HH:mm", {
+					locale: "pt-BR",
+				})
 			) : (
 				<span className="text-destructive animate-pulse">Não devolvida</span>
 			);
@@ -97,9 +99,22 @@ const columns: ColumnDef<Emprestimo>[] = [
 	},
 	{
 		id: "actions",
-		// cell: ({ row }) => {
-		// 	const emprestimo = row.original;
-		// },
+		cell: ({ row }) => {
+			const emprestimoId = row.original.id;
+
+			return (
+				<Link
+					to={"/listar-emprestimos/$id"}
+					params={{
+						id: emprestimoId,
+					}}
+				>
+					<Button>
+						<ArrowRight />
+					</Button>
+				</Link>
+			);
+		},
 	},
 ];
 

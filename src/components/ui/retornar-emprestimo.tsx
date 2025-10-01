@@ -25,10 +25,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { retornarEmprestimo } from "@/services/emprestimos";
 import { toast } from "sonner";
 import { CHAVES_QUERY_KEY } from "@/routes/_protected/emprestimos";
-import { useNavigate } from "@tanstack/react-router";
 
 function useRetornarEmprestimo() {
-	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: ["retornar-emprestimo"],
@@ -38,14 +36,6 @@ function useRetornarEmprestimo() {
 			toast.success("Sucesso ao devolver a chave!");
 			queryClient.invalidateQueries({
 				queryKey: [CHAVES_QUERY_KEY],
-			});
-			return navigate({
-				to: "/emprestimos",
-				search: {
-					status: "disponivel",
-				},
-				reloadDocument: true,
-				resetScroll: true,
 			});
 		},
 	});

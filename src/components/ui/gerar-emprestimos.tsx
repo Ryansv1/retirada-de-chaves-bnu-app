@@ -3,7 +3,6 @@ import { RetiradaChaveSchema, type IRetiradaData } from "@/schema/chave";
 import { gerarEmprestimo } from "@/services/emprestimos";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
@@ -28,7 +27,6 @@ import {
 import { Input } from "./input";
 
 function useGerarEmprestimo() {
-	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationKey: ["gerar-emprestimo"],
@@ -38,14 +36,6 @@ function useGerarEmprestimo() {
 			toast.success("Sucesso ao gerar empréstimo.");
 			queryClient.invalidateQueries({
 				queryKey: [CHAVES_QUERY_KEY],
-			});
-			return navigate({
-				to: "/emprestimos",
-				search: {
-					status: "disponivel",
-				},
-				reloadDocument: true,
-				resetScroll: true,
 			});
 		},
 	});
